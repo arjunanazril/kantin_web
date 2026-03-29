@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url = "mysql://root:@localhost:3306/db_kantin_sekolah"
+}
+
+// Tabel User (Siswa & Kantin)
+model User {
+  id        Int      @id @default(autoincrement())
+  nama      String
+  nisn      String   @unique
+  password  String
+  role      String   @default("siswa")
+  foto      String?  @default("blank-profile-picture-973460.png") // <--- TAMBAHKAN INI (Boleh kosong, defaultnya gambar polos)
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+// Tabel Produk (Menu Makanan)
+model Product {
+  id        Int      @id @default(autoincrement())
+  nama      String
+  harga     Decimal
+  stok      Int
+  gambar    String?  // Boleh kosong
+  kantinId  Int
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+// Tabel Order (Pesanan)
+model Order {
+  id        Int      @id @default(autoincrement())
+  status    String   @default("pending") // pending, dimasak, siap, selesai
+  total     Decimal
+  userId    Int
+  produkId  Int
+  createdAt DateTime @default(now())
+  
+  // Relasi (Penghubung)
+  user      User     @relation(fields: [userId], references: [id])
+  produk    Product  @relation(fields: [produkId], references: [id])
+}
+
