@@ -13,41 +13,75 @@ datasource db {
   url = "mysql://root:@localhost:3306/db_kantin_sekolah"
 }
 
-// Tabel User (Siswa & Kantin)
+enum Role {
+  siswa
+  penjual
+  admin
+}
+
+enum StatusOrder {
+  pending
+  dimasak
+  siap
+  selesai
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   nama      String
-  nisn      String   @unique
+  nisn      String?  @unique  // hanya siswa
+  username  String?  @unique  // hanya penjual/admin
   password  String
-  role      String   @default("siswa")
-  foto      String?  @default("blank-profile-picture-973460.png") // <--- TAMBAHKAN INI (Boleh kosong, defaultnya gambar polos)
+  role      Role     @default(siswa)
+  foto      String?  @default("blank-profile-picture-973460.png")
   createdAt DateTime @default(now())
+
   orders    Order[]
+  kantin    Kantin?  // relasi ke kantin kalau role = penjual
 }
 
-// Tabel Produk (Menu Makanan)
+model Kantin {
+  id        Int       @id @default(autoincrement())
+  nama      String
+  userId    Int       @unique  // 1 penjual = 1 kantin
+  createdAt DateTime  @default(now())
+
+  user      User      @relation(fields: [userId], references: [id])
+  products  Product[]
+}
+
 model Product {
   id        Int      @id @default(autoincrement())
   nama      String
   harga     Decimal
   stok      Int
-  gambar    String?  // Boleh kosong
+  gambar    String?
   kantinId  Int
   createdAt DateTime @default(now())
-  orders    Order[]
+
+  kantin    Kantin    @relation(fields: [kantinId], references: [id])
+  orderItems OrderItem[]
 }
 
-// Tabel Order (Pesanan)
 model Order {
-  id        Int      @id @default(autoincrement())
-  status    String   @default("pending") // pending, dimasak, siap, selesai
+  id        Int         @id @default(autoincrement())
+  status    StatusOrder @default(pending)
   total     Decimal
   userId    Int
+  createdAt DateTime    @default(now())
+
+  user      User        @relation(fields: [userId], references: [id])
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
   produkId  Int
-  createdAt DateTime @default(now())
-  
-  // Relasi (Penghubung)
-  user      User     @relation(fields: [userId], references: [id])
-  produk    Product  @relation(fields: [produkId], references: [id])
+  quantity  Int
+  harga     Decimal // snapshot harga saat order
+
+  order     Order   @relation(fields: [orderId], references: [id])
+  produk    Product @relation(fields: [produkId], references: [id])
 }
 

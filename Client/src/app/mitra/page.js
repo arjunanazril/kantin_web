@@ -1,43 +1,112 @@
-'use client';
-import Link from 'next/link';
+"use client";
+import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function MitraPage() {
-  return (
-    <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-6 py-16 text-center">
-        <h1 className="text-4xl font-extrabold text-gray-800 mb-6">
-          Punya Kantin di Sekolah? <br />
-          <span className="text-blue-600">Gabung Digital Sekarang!</span>
-        </h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 my-12">
-          <div className="p-6 border rounded-xl bg-blue-50">
-            <h3 className="font-bold text-xl mb-2">📈 Omzet Naik</h3>
-            <p>Jangkau siswa yang malas antri. Pesanan masuk otomatis ke HP.</p>
-          </div>
-          <div className="p-6 border rounded-xl bg-blue-50">
-            <h3 className="font-bold text-xl mb-2">⚡ Efisien</h3>
-            <p>Gak perlu teriak-teriak manggil siswa. Notifikasi otomatis saat makanan siap.</p>
-          </div>
-          <div className="p-6 border rounded-xl bg-blue-50">
-            <h3 className="font-bold text-xl mb-2">🔒 Data Aman</h3>
-            <p>Hanya melayani siswa & guru terverifikasi dari database sekolah.</p>
-          </div>
-        </div>
+  const [nama, setNama] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [namaKantin, setNamaKantin] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-        <div className="bg-gray-100 p-8 rounded-2xl max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Cara Bergabung</h2>
-          <p className="text-gray-600 mb-6">
-            Karena ini sistem tertutup (Satu Gedung), pendaftaran kantin dilakukan manual oleh Admin TJKT.
-          </p>
-          <a 
-            href="#"
-            onClick={() => alert("Hubungi Arjuna di XI TJKT 1")}
-            className="bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition"
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await axios.post("http://localhost:4000/auth/register/penjual", {
+        nama,
+        username,
+        password,
+        namaKantin,
+      });
+
+      alert("Yeay! Akun penjual berhasil dibuat. Silakan login!");
+      router.push("/login");
+
+    } catch (error) {
+      alert("Gagal Daftar: " + (error.response?.data?.msg || "Server Error"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-orange-50">
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-center text-orange-700 mb-2">
+          Daftar Sebagai Penjual 🍱
+        </h2>
+        <p className="text-center text-gray-500 text-sm mb-6">
+          Buka lapak kantin kamu di sini!
+        </p>
+
+        <form onSubmit={handleRegister} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">Nama Penjual</label>
+            <input
+              type="text"
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+              className="w-full p-3 border rounded-lg focus:outline-orange-500 text-black"
+              placeholder="Contoh: Bu Sari"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-3 border rounded-lg focus:outline-orange-500 text-black"
+              placeholder="Contoh: kantin_bu_sari"
+              required
+            />
+            <p className="text-xs text-gray-400 mt-1">Dipakai untuk login, tanpa spasi</p>
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">Nama Kantin</label>
+            <input
+              type="text"
+              value={namaKantin}
+              onChange={(e) => setNamaKantin(e.target.value)}
+              className="w-full p-3 border rounded-lg focus:outline-orange-500 text-black"
+              placeholder="Contoh: Kantin Bu Sari"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 border rounded-lg focus:outline-orange-500 text-black"
+              placeholder="Bikin yang kuat ya!"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 bg-orange-600 text-white font-bold rounded-lg hover:bg-orange-700 transition disabled:opacity-50"
           >
-            WhatsApp Admin (Arjuna)
-          </a>
-        </div>
+            {loading ? "Loading..." : "Daftar Sekarang"}
+          </button>
+        </form>
+
+        <p className="mt-4 text-center text-gray-600">
+          Sudah punya akun?{" "}
+          <Link href="/login" className="text-orange-600 font-bold">Login aja</Link>
+        </p>
       </div>
     </div>
   );
