@@ -43,8 +43,8 @@ export default function Navbar({ user, refreshUser }) {
 
   return (
     <nav className="bg-white border-b px-6 py-3 flex justify-between items-center shadow-sm sticky top-0 z-50">
-      <h1 className="text-xl font-extrabold text-blue-600 tracking-tighter cursor-pointer">
-        KANTIN<span className="text-orange-500">APP</span>
+      <h1 className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 tracking-tighter cursor-pointer">
+        Skagara<span className="text-orange-500">Canteen</span>
       </h1>
 
       <div className="flex items-center gap-4">

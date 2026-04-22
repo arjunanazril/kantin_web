@@ -25,7 +25,7 @@ export default function LoginPage() {
 
       // Redirect berdasarkan role
       if (user.role === "penjual") {
-        router.push("/dashboard");
+        router.push("/kantin");
       } else {
         router.push("/menu");
       }

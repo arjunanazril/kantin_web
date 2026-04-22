@@ -23,6 +23,15 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleMenuJajan = (e) => {
+    e.preventDefault();
+    if (isLoggedIn) {
+      router.push("/menu");
+    } else {
+      router.push("/login");
+    }
+  };
+
   const handlePesanSekarang = (e) => {
     e.preventDefault(); 
     if (isLoggedIn) {
@@ -80,8 +89,8 @@ export default function Home() {
         </div>
         <div className="space-x-8 hidden md:flex font-medium text-gray-600">
           <Link href="/" className="hover:text-blue-600 transition">Platform</Link>
-          <Link href="/menu" className="hover:text-blue-600 transition">Menu Jajan</Link>
-          <Link href="/mitra" className="hover:text-blue-600 transition">Solusi Mitra</Link>
+          <button onClick={handleMenuJajan} className="hover:text-blue-600 transition">Menu Jajan</button>
+          <a href="#solusi-mitra" className="hover:text-blue-600 transition">Solusi Mitra</a>
         </div>
         <div>
           <Link href="/login" className="text-gray-700 font-bold hover:text-blue-600 transition px-4 py-2">
@@ -139,8 +148,8 @@ export default function Home() {
               onClick={handlePesanSekarang} 
               className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-all transform hover:-translate-y-1"
             >
-              Request a demo
-            </button>
+              Start Here !
+            </button> 
           </motion.div>
         </div>
 
@@ -294,6 +303,48 @@ export default function Home() {
               <h4 className="font-bold text-lg mb-2 text-gray-800">Ambil Pesanan</h4>
               <p className="text-gray-500 text-sm px-4">Tunjukin bukti pesanan, langsung bawa makanan lu!</p>
             </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* --- SOLUSI MITRA SECTION --- */}
+      <div id="solusi-mitra" className="relative z-10 py-24 bg-gradient-to-br from-orange-50 to-amber-50 border-t border-orange-100">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <span className="bg-orange-100 text-orange-600 text-sm font-bold px-4 py-2 rounded-full">Untuk Penjual Kantin</span>
+            <h2 className="text-4xl font-extrabold text-gray-900 mt-6 mb-4">Solusi <span className="text-orange-500">Mitra</span> Kantin</h2>
+            <p className="text-gray-500 max-w-2xl mx-auto text-lg">Kelola lapak kantinmu lebih mudah. Tambah menu, pantau pesanan masuk, dan tingkatkan penjualan — semua dari satu dashboard.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ delay:0.1 }} className="bg-white p-6 rounded-2xl shadow-lg border border-orange-100 text-center">
+              <div className="text-4xl mb-4">🍱</div>
+              <h3 className="font-bold text-lg text-gray-800 mb-2">Kelola Menu Mudah</h3>
+              <p className="text-gray-500 text-sm">Tambah, edit, atau hapus menu kantin kapan saja lengkap dengan foto dan stok.</p>
+            </motion.div>
+            <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ delay:0.2 }} className="bg-white p-6 rounded-2xl shadow-lg border border-orange-100 text-center">
+              <div className="text-4xl mb-4">🔔</div>
+              <h3 className="font-bold text-lg text-gray-800 mb-2">Notifikasi Pesanan</h3>
+              <p className="text-gray-500 text-sm">Terima notifikasi real-time setiap ada pesanan masuk dari murid-murid.</p>
+            </motion.div>
+            <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ delay:0.3 }} className="bg-white p-6 rounded-2xl shadow-lg border border-orange-100 text-center">
+              <div className="text-4xl mb-4">📊</div>
+              <h3 className="font-bold text-lg text-gray-800 mb-2">Laporan Penjualan</h3>
+              <p className="text-gray-500 text-sm">Lihat menu terlaris dan rekap pendapatan harianmu dengan mudah.</p>
+            </motion.div>
+          </div>
+
+          <div className="text-center">
+            <Link href="/mitra" className="inline-block bg-orange-500 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-orange-600 transition transform hover:-translate-y-1 shadow-lg shadow-orange-200">
+              Daftar Sebagai Penjual →
+            </Link>
+            <p className="text-gray-400 text-sm mt-3">Sudah punya akun? <Link href="/login" className="text-orange-500 font-medium">Login di sini</Link></p>
           </div>
         </div>
       </div>

@@ -31,7 +31,7 @@ export default function DashboardPage() {
   // --- 3. AMBIL MENU DARI BACKEND ---
   const fetchMenu = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/menu");
+      const response = await axios.get("http://localhost:4000/produk");
       setMenus(response.data);
       setLoading(false);
     } catch (error) {
